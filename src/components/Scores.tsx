@@ -1,6 +1,7 @@
 import type { ScoreEntry } from "../types/score";
 import type { Settings } from "../types/settings";
 import PlayerScore from "./PlayerScore";
+import { useWakeLock } from "../hooks/useWakeLock";
 
 interface ScoresProps {
   entries: ScoreEntry[];
@@ -10,6 +11,8 @@ interface ScoresProps {
 }
 
 export default function Scores({ entries, addScore, setPlayerScore, settings }: ScoresProps) {
+  useWakeLock();
+
   const individualScore = (se: 1 | 2 | 3) => {
     return entries
       .filter((e) => e.player === se)

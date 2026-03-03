@@ -45,26 +45,6 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       <h2 className="text-xl font-bold">Settings</h2>
 
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">How to Use</h3>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
-            <span className="text-lg mt-0.5">👆</span>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold">Quick tap</span>
-              <span className="text-sm opacity-60">Tap the +1 or +2 buttons to add points instantly.</span>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
-            <span className="text-lg mt-0.5">✋</span>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold">Press and hold the score area</span>
-              <span className="text-sm opacity-60">Hold on a player's score to manually enter any value or set an exact score.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Players</h3>
         {([1, 2] as const).map((player) => (
           <div key={player} className="flex flex-col gap-1">
@@ -121,6 +101,26 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
               </span>
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">How to Use</h3>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
+            <span className="text-lg mt-0.5">👆</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold">Quick tap</span>
+              <span className="text-sm opacity-60">Tap the +1 or +2 buttons to add points instantly.</span>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
+            <span className="text-lg mt-0.5">✋</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold">Press and hold the score area</span>
+              <span className="text-sm opacity-60">Hold on a player's score to manually enter any value or set an exact score.</span>
+            </div>
+          </div>
         </div>
       </div>
 
