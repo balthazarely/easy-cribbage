@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Card background -->
+  <rect x="4" y="2" width="24" height="28" rx="3" fill="#fff" stroke="#e0e0e0" stroke-width="1.5"/>
+
+  <!-- Single large heart center -->
+  <text x="16" y="22" font-family="Georgia, serif" font-size="20"
+        fill="#e63946" text-anchor="middle">♥</text>
+</svg>
