@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { FiShare } from "react-icons/fi";
 import type { Settings as SettingsType } from "../types/settings";
 
 interface SettingsProps {
@@ -12,6 +13,7 @@ interface SettingsProps {
 
 export default function Settings({ reset, hasScores, settings, changePlayerName, setOrientation }: SettingsProps) {
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showInstall, setShowInstall] = useState(false);
 
   const orientation = (player: 1 | 2) =>
     player === 1 ? settings.playerOneOrientation : settings.playerTwoOrientation;
@@ -67,6 +69,16 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       </div>
 
       <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Install</h3>
+        <button
+          onClick={() => setShowInstall(true)}
+          className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
+        >
+          Add to Home Screen
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Game</h3>
         <button
           onClick={() => setShowConfirm(true)}
@@ -76,6 +88,34 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
           Reset Scores
         </button>
       </div>
+
+      {showInstall && (
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4">
+            <h3 className="text-xl font-bold">Add to Home Screen</h3>
+            <div className="flex flex-col gap-3 text-sm">
+              <div className="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                <span className="bg-white/10 rounded-lg p-2"><FiShare size={20} /></span>
+                <span className="opacity-80">Tap the <span className="font-semibold">Share</span> button in Safari's toolbar</span>
+              </div>
+              <div className="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                <span className="bg-white/10 rounded-lg p-2 text-lg font-bold">+</span>
+                <span className="opacity-80">Tap <span className="font-semibold">Add to Home Screen</span></span>
+              </div>
+              <div className="flex items-center gap-3 bg-white/10 rounded-xl p-3">
+                <span className="bg-white/10 rounded-lg p-2 text-lg">✓</span>
+                <span className="opacity-80">Tap <span className="font-semibold">Add</span> to confirm</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowInstall(false)}
+              className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       {showConfirm && (
         <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">

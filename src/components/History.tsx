@@ -37,12 +37,14 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
             <span className="text-xs opacity-40">
               {new Date(entry.timestamp).toLocaleTimeString()}
             </span>
-            <button
-              onClick={() => setPendingIndex(originalIndex)}
-              className="p-2 rounded-lg bg-white/10 active:bg-white/20 opacity-60"
-            >
-              <FaUndo size={14} />
-            </button>
+            {reversedIndex > 0 && (
+              <button
+                onClick={() => setPendingIndex(originalIndex)}
+                className="p-2 rounded-lg bg-white/10 active:bg-white/20 opacity-60"
+              >
+                <FaUndo size={14} />
+              </button>
+            )}
           </div>
         );
       })}
