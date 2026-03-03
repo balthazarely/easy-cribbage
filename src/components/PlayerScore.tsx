@@ -37,17 +37,19 @@ export default function PlayerScore({
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [mode, setMode] = useState<Mode>("add");
-  const lastTap = useRef<number>(0);
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const theme = themes[player];
 
-  const handleScorePress = () => {
-    const now = Date.now();
-    if (now - lastTap.current < 300) {
+  const handlePointerDown = () => {
+    holdTimer.current = setTimeout(() => {
       setInputValue("");
       setMode("add");
       setShowInput(true);
-    }
-    lastTap.current = now;
+    }, 500);
+  };
+
+  const handlePointerUp = () => {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
   };
 
   const handleSubmit = () => {
@@ -67,25 +69,27 @@ export default function PlayerScore({
       }}
     >
       <div
-        className="flex flex-col flex-1 items-center justify-center gap-1"
-        onPointerDown={handleScorePress}
+        className="flex flex-col flex-[3] min-h-0 items-center justify-center gap-1"
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
       >
-        <span className="text-2xl font-semibold opacity-50 uppercase tracking-widest">
+        <span className="text-[clamp(0.875rem,2.5dvh,1.5rem)] font-semibold opacity-50 uppercase tracking-widest">
           {name}
         </span>
-        <span className="text-[9rem] font-bold leading-none">{score}</span>
+        <span className="text-[clamp(3rem,12dvh,9rem)] font-bold leading-none">{score}</span>
       </div>
 
-      <div className="flex gap-2 p-2">
+      <div className="flex flex-[2] gap-2 p-2">
         <button
           onClick={() => addScore(player, 1)}
-          className={`flex-1 py-14 rounded-xl text-5xl font-bold ${theme.button}`}
+          className={`flex-1 h-full rounded-xl text-5xl font-bold ${theme.button}`}
         >
           +1
         </button>
         <button
           onClick={() => addScore(player, 2)}
-          className={`flex-1 py-14 rounded-xl text-5xl font-bold ${theme.button}`}
+          className={`flex-1 h-full rounded-xl text-5xl font-bold ${theme.button}`}
         >
           +2
         </button>

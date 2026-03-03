@@ -20,7 +20,7 @@ function App() {
             element={<Scores entries={entries} addScore={addScore} setPlayerScore={setPlayerScore} settings={settings} />}
           />
           <Route path="/history" element={<History entries={entries} settings={settings} resetToIndex={resetToIndex} />} />
-          <Route path="/settings" element={<Settings reset={reset} settings={settings} changePlayerName={changePlayerName} setOrientation={setOrientation} />} />
+          <Route path="/settings" element={<Settings reset={reset} hasScores={entries.length > 0} settings={settings} changePlayerName={changePlayerName} setOrientation={setOrientation} />} />
         </Routes>
       </div>
       <Menu />

@@ -4,12 +4,13 @@ import type { Settings as SettingsType } from "../types/settings";
 
 interface SettingsProps {
   reset: () => void;
+  hasScores: boolean;
   settings: SettingsType;
   changePlayerName: (player: 1 | 2, name: string) => void;
   setOrientation: (player: 1 | 2, degrees: number) => void;
 }
 
-export default function Settings({ reset, settings, changePlayerName, setOrientation }: SettingsProps) {
+export default function Settings({ reset, hasScores, settings, changePlayerName, setOrientation }: SettingsProps) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const orientation = (player: 1 | 2) =>
@@ -69,7 +70,8 @@ export default function Settings({ reset, settings, changePlayerName, setOrienta
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Game</h3>
         <button
           onClick={() => setShowConfirm(true)}
-          className="w-full py-4 rounded-xl bg-red-600 active:bg-red-700 text-white font-semibold text-lg"
+          disabled={!hasScores}
+          className="w-full py-4 rounded-xl bg-red-600 text-white font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed active:enabled:bg-red-700"
         >
           Reset Scores
         </button>
