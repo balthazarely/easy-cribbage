@@ -12,7 +12,7 @@ function App() {
   const { settings, changePlayerName, setOrientation, togglePlayerThree } = useSettings();
 
   return (
-    <div className="flex flex-col h-dvh w-full bg-slate-900 text-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+    <div className="flex flex-col h-dvh w-full bg-slate-900 text-white pt-[env(safe-area-inset-top)]">
       <div className="flex-1 overflow-auto">
         <Routes>
           <Route

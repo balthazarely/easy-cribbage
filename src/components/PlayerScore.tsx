@@ -56,7 +56,7 @@ export default function PlayerScore({
       }}
     >
       <div
-        className="relative flex flex-col flex-[3] min-h-0 items-center justify-center gap-1"
+        className="relative flex flex-col flex-[3] min-h-0 items-center justify-center gap-1 py-3"
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
@@ -65,7 +65,7 @@ export default function PlayerScore({
         <span className="text-[clamp(0.875rem,2.5dvh,1.5rem)] font-semibold opacity-50 uppercase tracking-widest">
           {name}
         </span>
-        <span className="text-[clamp(3rem,12dvh,9rem)] font-bold leading-none">
+        <span className="text-[clamp(2rem,10dvh,9rem)] font-bold leading-none">
           {score}
         </span>
       </div>
@@ -73,13 +73,13 @@ export default function PlayerScore({
       <div className="flex flex-[2] gap-2 p-2">
         <button
           onClick={() => addScore(player, 1)}
-          className={`flex-1 h-full rounded-xl text-5xl font-bold ${theme.button}`}
+          className={`flex-1 h-full rounded-xl text-[clamp(1.5rem,4dvh,3rem)] font-bold ${theme.button}`}
         >
           +1
         </button>
         <button
           onClick={() => addScore(player, 2)}
-          className={`flex-1 h-full rounded-xl text-5xl font-bold ${theme.button}`}
+          className={`flex-1 h-full rounded-xl text-[clamp(1.5rem,4dvh,3rem)] font-bold ${theme.button}`}
         >
           +2
         </button>

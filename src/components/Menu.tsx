@@ -9,7 +9,7 @@ const links = [
 
 export default function Menu() {
   return (
-    <div className="flex shrink-0 w-full justify-around items-center py-3 px-6 bg-slate-800 border-t border-white/10">
+    <div className="flex shrink-0 w-full justify-around items-center pt-3 px-6 bg-slate-800 border-t border-white/10" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
       {links.map(({ to, icon: Icon, label }) => (
         <NavLink
           key={to}
