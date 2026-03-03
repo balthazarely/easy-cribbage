@@ -9,7 +9,7 @@ import Scores from "./components/Scores";
 
 function App() {
   const { entries, addScore, reset, resetToIndex, setPlayerScore } = useScoreHistory();
-  const { settings, changePlayerName, setOrientation } = useSettings();
+  const { settings, changePlayerName, setOrientation, togglePlayerThree } = useSettings();
 
   return (
     <div className="flex flex-col h-dvh w-full bg-slate-900 text-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -20,7 +20,7 @@ function App() {
             element={<Scores entries={entries} addScore={addScore} setPlayerScore={setPlayerScore} settings={settings} />}
           />
           <Route path="/history" element={<History entries={entries} settings={settings} resetToIndex={resetToIndex} />} />
-          <Route path="/settings" element={<Settings reset={reset} hasScores={entries.length > 0} settings={settings} changePlayerName={changePlayerName} setOrientation={setOrientation} />} />
+          <Route path="/settings" element={<Settings reset={reset} hasScores={entries.length > 0} settings={settings} changePlayerName={changePlayerName} setOrientation={setOrientation} togglePlayerThree={togglePlayerThree} />} />
         </Routes>
       </div>
       <Menu />

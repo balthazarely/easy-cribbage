@@ -11,7 +11,7 @@ export function useScoreHistory() {
     localStorage.setItem("cribbage-history", JSON.stringify(entries));
   }, [entries]);
 
-  const addScore = (player: 1 | 2, score: number) => {
+  const addScore = (player: 1 | 2 | 3, score: number) => {
     const newEntry: ScoreEntry = {
       player,
       score,
@@ -32,7 +32,7 @@ export function useScoreHistory() {
     setEntries((prev) => prev.slice(0, index + 1));
   };
 
-  const setPlayerScore = (player: 1 | 2, score: number) => {
+  const setPlayerScore = (player: 1 | 2 | 3, score: number) => {
     setEntries((prev) => [
       ...prev.filter((e) => e.player !== player),
       { player, score, timestamp: new Date() },

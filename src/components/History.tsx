@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaUndo } from "react-icons/fa";
 import type { ScoreEntry } from "../types/score";
 import type { Settings } from "../types/settings";
+import { themes } from "../themes";
 
 interface HistoryProps {
   entries: ScoreEntry[];
@@ -12,8 +13,11 @@ interface HistoryProps {
 export default function History({ entries, settings, resetToIndex }: HistoryProps) {
   const [pendingIndex, setPendingIndex] = useState<number | null>(null);
 
-  const playerName = (player: 1 | 2) =>
-    player === 1 ? settings.playerOneName : settings.playerTwoName;
+  const playerName = (player: 1 | 2 | 3) => {
+    if (player === 1) return settings.playerOneName;
+    if (player === 2) return settings.playerTwoName;
+    return settings.playerThreeName;
+  };
 
   const handleConfirm = () => {
     if (pendingIndex !== null) {
@@ -31,7 +35,7 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
       {[...entries].reverse().map((entry, reversedIndex) => {
         const originalIndex = entries.length - 1 - reversedIndex;
         return (
-          <div key={originalIndex} className="flex items-center py-2 border-b border-white/10 gap-3">
+          <div key={originalIndex} className={`flex items-center px-3 py-2 rounded-xl border ${themes[entry.player].card} ${themes[entry.player].border} gap-3`}>
             <span className="opacity-60 w-24">{playerName(entry.player)}</span>
             <span className="font-semibold flex-1">+{entry.score}</span>
             <span className="text-xs opacity-40">
@@ -50,8 +54,8 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
       })}
 
       {pendingIndex !== null && (
-        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4">
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setPendingIndex(null)}>
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-xl font-bold text-center">Rewind to this point?</h3>
             <p className="text-center opacity-60 text-sm">All scores after this entry will be removed.</p>
             <button

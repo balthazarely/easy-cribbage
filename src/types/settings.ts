@@ -4,4 +4,7 @@ export interface Settings {
   maxScore: number;
   playerOneOrientation: number;
   playerTwoOrientation: number;
+  playerThreeEnabled: boolean;
+  playerThreeName: string;
+  playerThreeOrientation: number;
 }

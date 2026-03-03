@@ -7,18 +7,28 @@ interface SettingsProps {
   reset: () => void;
   hasScores: boolean;
   settings: SettingsType;
-  changePlayerName: (player: 1 | 2, name: string) => void;
-  setOrientation: (player: 1 | 2, degrees: number) => void;
+  changePlayerName: (player: 1 | 2 | 3, name: string) => void;
+  setOrientation: (player: 1 | 2 | 3, degrees: number) => void;
+  togglePlayerThree: () => void;
 }
 
-export default function Settings({ reset, hasScores, settings, changePlayerName, setOrientation }: SettingsProps) {
+export default function Settings({ reset, hasScores, settings, changePlayerName, setOrientation, togglePlayerThree }: SettingsProps) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
 
-  const orientation = (player: 1 | 2) =>
-    player === 1 ? settings.playerOneOrientation : settings.playerTwoOrientation;
+  const orientation = (player: 1 | 2 | 3) => {
+    if (player === 1) return settings.playerOneOrientation;
+    if (player === 2) return settings.playerTwoOrientation;
+    return settings.playerThreeOrientation;
+  };
 
-  const cycleOrientation = (player: 1 | 2) => {
+  const playerName = (player: 1 | 2 | 3) => {
+    if (player === 1) return settings.playerOneName;
+    if (player === 2) return settings.playerTwoName;
+    return settings.playerThreeName;
+  };
+
+  const cycleOrientation = (player: 1 | 2 | 3) => {
     const next = (orientation(player) + 90) % 360;
     setOrientation(player, next);
   };
@@ -28,29 +38,75 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
     setShowConfirm(false);
   };
 
+  const activePlayers: (1 | 2 | 3)[] = settings.playerThreeEnabled ? [1, 2, 3] : [1, 2];
+
   return (
     <div className="flex flex-col p-4 gap-6">
       <h2 className="text-xl font-bold">Settings</h2>
 
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Player Names</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">How to Use</h3>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
+            <span className="text-lg mt-0.5">👆</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold">Quick tap</span>
+              <span className="text-sm opacity-60">Tap the +1 or +2 buttons to add points instantly.</span>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 bg-white/5 rounded-xl p-3">
+            <span className="text-lg mt-0.5">✋</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold">Press and hold the score area</span>
+              <span className="text-sm opacity-60">Hold on a player's score to manually enter any value or set an exact score.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Players</h3>
         {([1, 2] as const).map((player) => (
           <div key={player} className="flex flex-col gap-1">
             <label className="text-sm opacity-60">Player {player}</label>
             <input
               type="text"
-              value={player === 1 ? settings.playerOneName : settings.playerTwoName}
+              value={playerName(player)}
               onChange={(e) => changePlayerName(player, e.target.value)}
               className="w-full bg-white/10 rounded-xl px-4 py-3 text-white text-lg outline-none focus:ring-2 focus:ring-white/30"
             />
           </div>
         ))}
+
+        <div className="flex items-center justify-between py-2">
+          <span className="text-sm opacity-60">Enable Player 3</span>
+          <button
+            onClick={togglePlayerThree}
+            className={`relative w-14 h-7 rounded-full transition-colors ${settings.playerThreeEnabled ? "bg-green-600" : "bg-white/20"}`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform ${settings.playerThreeEnabled ? "translate-x-7" : "translate-x-0"}`}
+            />
+          </button>
+        </div>
+
+        {settings.playerThreeEnabled && (
+          <div className="flex flex-col gap-1">
+            <label className="text-sm opacity-60">Player 3</label>
+            <input
+              type="text"
+              value={settings.playerThreeName}
+              onChange={(e) => changePlayerName(3, e.target.value)}
+              className="w-full bg-white/10 rounded-xl px-4 py-3 text-white text-lg outline-none focus:ring-2 focus:ring-white/30"
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Orientation</h3>
         <div className="flex gap-2">
-          {([1, 2] as const).map((player) => (
+          {activePlayers.map((player) => (
             <button
               key={player}
               onClick={() => cycleOrientation(player)}
@@ -61,7 +117,7 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
                 style={{ transform: `rotate(${orientation(player)}deg)`, transition: "transform 0.3s" }}
               />
               <span className="text-xs opacity-50">
-                {player === 1 ? settings.playerOneName : settings.playerTwoName} · {orientation(player)}°
+                {playerName(player)} · {orientation(player)}°
               </span>
             </button>
           ))}
@@ -90,8 +146,8 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       </div>
 
       {showInstall && (
-        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4">
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowInstall(false)}>
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-xl font-bold">Add to Home Screen</h3>
             <div className="flex flex-col gap-3 text-sm">
               <div className="flex items-center gap-3 bg-white/10 rounded-xl p-3">
@@ -118,8 +174,8 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       )}
 
       {showConfirm && (
-        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4">
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowConfirm(false)}>
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-xl font-bold text-center">Reset Scores?</h3>
             <p className="text-center opacity-60 text-sm">This will clear all score history and cannot be undone.</p>
             <button

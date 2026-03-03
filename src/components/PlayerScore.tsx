@@ -1,30 +1,17 @@
 import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { FiEdit2 } from "react-icons/fi";
+import { themes } from "../themes";
 
 interface PlayerScoreProps {
-  player: 1 | 2;
+  player: 1 | 2 | 3;
   score: number;
-  addScore: (player: 1 | 2, score: number) => void;
-  setPlayerScore: (player: 1 | 2, score: number) => void;
+  addScore: (player: 1 | 2 | 3, score: number) => void;
+  setPlayerScore: (player: 1 | 2 | 3, score: number) => void;
   name: string;
   orientation: number;
 }
 
-type Mode = "add" | "set";
-
-const themes = {
-  1: {
-    card: "bg-blue-950",
-    button: "bg-blue-800 active:bg-blue-700",
-    modeActive: "bg-blue-700",
-    modeInactive: "bg-blue-900",
-  },
-  2: {
-    card: "bg-rose-950",
-    button: "bg-rose-800 active:bg-rose-700",
-    modeActive: "bg-rose-700",
-    modeInactive: "bg-rose-900",
-  },
-};
 
 export default function PlayerScore({
   player,
@@ -36,7 +23,7 @@ export default function PlayerScore({
 }: PlayerScoreProps) {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [mode, setMode] = useState<Mode>("add");
+  const [mode, setMode] = useState<"add" | "set">("add");
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const theme = themes[player];
 
@@ -69,15 +56,18 @@ export default function PlayerScore({
       }}
     >
       <div
-        className="flex flex-col flex-[3] min-h-0 items-center justify-center gap-1"
+        className="relative flex flex-col flex-[3] min-h-0 items-center justify-center gap-1"
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
       >
+        <FiEdit2 className="absolute top-3 right-3 opacity-20" size={14} />
         <span className="text-[clamp(0.875rem,2.5dvh,1.5rem)] font-semibold opacity-50 uppercase tracking-widest">
           {name}
         </span>
-        <span className="text-[clamp(3rem,12dvh,9rem)] font-bold leading-none">{score}</span>
+        <span className="text-[clamp(3rem,12dvh,9rem)] font-bold leading-none">
+          {score}
+        </span>
       </div>
 
       <div className="flex flex-[2] gap-2 p-2">
@@ -95,8 +85,9 @@ export default function PlayerScore({
         </button>
       </div>
 
-      {showInput && (
-        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
+      {showInput && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowInput(false)}>
+          <div className="animate-slide-up w-full" onClick={(e) => e.stopPropagation()}>
           <div
             className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4"
             style={{ transform: `rotate(${orientation}deg)` }}
@@ -142,7 +133,9 @@ export default function PlayerScore({
               Cancel
             </button>
           </div>
-        </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );
