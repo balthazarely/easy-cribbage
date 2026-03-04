@@ -24,6 +24,16 @@ export function useScoreHistory() {
     setEntries((prev) => prev.slice(0, -1));
   };
 
+  const undoPlayerScore = (player: 1 | 2 | 3) => {
+    setEntries((prev) => {
+      let removed = false;
+      return [...prev].reverse().filter((e) => {
+        if (!removed && e.player === player) { removed = true; return false; }
+        return true;
+      }).reverse();
+    });
+  };
+
   const reset = () => {
     setEntries([]);
   };
@@ -43,6 +53,7 @@ export function useScoreHistory() {
     entries,
     addScore,
     undo,
+    undoPlayerScore,
     reset,
     resetToIndex,
     setPlayerScore,

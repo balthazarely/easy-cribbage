@@ -8,7 +8,7 @@ import Settings from "./components/Settings";
 import Scores from "./components/Scores";
 
 function App() {
-  const { entries, addScore, reset, resetToIndex, setPlayerScore } = useScoreHistory();
+  const { entries, addScore, reset, resetToIndex, setPlayerScore, undoPlayerScore } = useScoreHistory();
   const { settings, changePlayerName, setOrientation, togglePlayerThree } = useSettings();
 
   return (
@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Scores entries={entries} addScore={addScore} setPlayerScore={setPlayerScore} settings={settings} />}
+            element={<Scores entries={entries} addScore={addScore} setPlayerScore={setPlayerScore} undoPlayerScore={undoPlayerScore} settings={settings} />}
           />
           <Route path="/history" element={<History entries={entries} settings={settings} resetToIndex={resetToIndex} />} />
           <Route path="/settings" element={<Settings reset={reset} hasScores={entries.length > 0} settings={settings} changePlayerName={changePlayerName} setOrientation={setOrientation} togglePlayerThree={togglePlayerThree} />} />

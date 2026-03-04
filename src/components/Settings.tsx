@@ -16,6 +16,7 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
   const [showConfirm, setShowConfirm] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
   const [showHowToUse, setShowHowToUse] = useState(false);
+  const [showScoringRules, setShowScoringRules] = useState(false);
 
   const orientation = (player: 1 | 2 | 3) => {
     if (player === 1) return settings.playerOneOrientation;
@@ -131,6 +132,16 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       </div>
 
       <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Scoring Rules</h3>
+        <button
+          onClick={() => setShowScoringRules(true)}
+          className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
+        >
+          View Rules
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Install</h3>
         <button
           onClick={() => setShowInstall(true)}
@@ -169,6 +180,75 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
             </div>
             <button
               onClick={() => setShowHowToUse(false)}
+              className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showScoringRules && (
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowScoringRules(false)}>
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up max-h-[85dvh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-xl font-bold">Cribbage Scoring</h3>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-semibold uppercase tracking-widest opacity-40 mb-1">Pegging</p>
+              {[
+                ["Go (last card)", "1 pt"],
+                ["Thirty-one", "2 pts"],
+                ["Fifteen (total = 15)", "2 pts"],
+                ["Pair", "2 pts"],
+                ["Three of a kind", "6 pts"],
+                ["Four of a kind", "12 pts"],
+                ["Run of 3", "3 pts"],
+                ["Run of 4", "4 pts"],
+                ["Run of 5+", "1 pt / card"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between items-center bg-white/5 rounded-xl px-4 py-2.5">
+                  <span className="text-sm opacity-80">{label}</span>
+                  <span className="text-sm font-semibold">{value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-semibold uppercase tracking-widest opacity-40 mb-1">Counting the Hand</p>
+              {[
+                ["Fifteen (any combo = 15)", "2 pts each"],
+                ["Pair", "2 pts each"],
+                ["Three of a kind", "6 pts"],
+                ["Four of a kind", "12 pts"],
+                ["Run of 3", "3 pts"],
+                ["Run of 4", "4 pts"],
+                ["Run of 5", "5 pts"],
+                ["Flush — 4 cards in hand", "4 pts"],
+                ["Flush — 5 with starter", "5 pts"],
+                ["His Nobs (J of starter suit)", "1 pt"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between items-center bg-white/5 rounded-xl px-4 py-2.5">
+                  <span className="text-sm opacity-80">{label}</span>
+                  <span className="text-sm font-semibold">{value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-semibold uppercase tracking-widest opacity-40 mb-1">Special</p>
+              {[
+                ["His Heels (starter is J)", "2 pts — dealer"],
+                ["Perfect hand", "29 pts"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between items-center bg-white/5 rounded-xl px-4 py-2.5">
+                  <span className="text-sm opacity-80">{label}</span>
+                  <span className="text-sm font-semibold">{value}</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowScoringRules(false)}
               className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
             >
               Done

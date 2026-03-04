@@ -1,14 +1,16 @@
 import { useRef, useState, useEffect } from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { FiEdit2 } from "react-icons/fi";
+import { FaUndo } from "react-icons/fa";
 import { themes } from "../themes";
+import { playTick } from "../utils/sound";
 
 interface PlayerScoreProps {
   player: 1 | 2 | 3;
   score: number;
   addScore: (player: 1 | 2 | 3, score: number) => void;
   setPlayerScore: (player: 1 | 2 | 3, score: number) => void;
+  undoPlayerScore: (player: 1 | 2 | 3) => void;
   name: string;
   orientation: number;
 }
@@ -18,6 +20,7 @@ export default function PlayerScore({
   score,
   addScore,
   setPlayerScore,
+  undoPlayerScore,
   name,
   orientation,
 }: PlayerScoreProps) {
@@ -93,7 +96,15 @@ export default function PlayerScore({
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
         >
-          <FiEdit2 className="absolute top-3 right-3 opacity-20" size={14} />
+          <button
+            onPointerDown={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); playTick(); undoPlayerScore(player); }}
+            disabled={score === 0}
+            className="absolute top-1 right-1 p-4 rounded-xl opacity-30 disabled:opacity-10 active:enabled:opacity-60 active:enabled:bg-white/10"
+          >
+            <FaUndo size={18} />
+          </button>
           <span className="text-[clamp(0.875rem,2.5dvh,1.5rem)] font-semibold opacity-50 uppercase tracking-widest">
             {name}
           </span>
@@ -104,13 +115,13 @@ export default function PlayerScore({
 
         <div className="flex flex-[3] gap-2 p-2">
           <button
-            onClick={() => addScore(player, 1)}
+            onClick={() => { playTick(); addScore(player, 1); }}
             className={`flex-1 h-full rounded-xl text-[clamp(1.5rem,4dvh,3rem)] font-bold ${theme.button}`}
           >
             +1
           </button>
           <button
-            onClick={() => addScore(player, 2)}
+            onClick={() => { playTick(); addScore(player, 2); }}
             className={`flex-1 h-full rounded-xl text-[clamp(1.5rem,4dvh,3rem)] font-bold ${theme.button}`}
           >
             +2
