@@ -88,10 +88,7 @@ export default function PlayerScore({
       {showInput && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowInput(false)}>
           <div className="animate-slide-up w-full" onClick={(e) => e.stopPropagation()}>
-          <div
-            className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4"
-            style={{ transform: `rotate(${orientation}deg)` }}
-          >
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4">
             <h3 className="text-xl font-bold text-center">{name}</h3>
 
             <div className="flex rounded-xl overflow-hidden">

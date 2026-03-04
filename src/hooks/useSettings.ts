@@ -43,7 +43,15 @@ export function useSettings() {
   };
 
   const togglePlayerThree = () => {
-    setSettings((prev) => ({ ...prev, playerThreeEnabled: !prev.playerThreeEnabled }));
+    setSettings((prev) => ({
+      ...prev,
+      playerThreeEnabled: !prev.playerThreeEnabled,
+      ...(!prev.playerThreeEnabled && {
+        playerOneOrientation: 0,
+        playerTwoOrientation: 0,
+        playerThreeOrientation: 0,
+      }),
+    }));
   };
 
   return { settings, changePlayerName, setOrientation, togglePlayerThree };

@@ -85,12 +85,16 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
 
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Orientation</h3>
+        {settings.playerThreeEnabled && (
+          <p className="text-sm opacity-40">Rotation is disabled when 3 players are enabled.</p>
+        )}
         <div className="flex gap-2">
           {activePlayers.map((player) => (
             <button
               key={player}
               onClick={() => cycleOrientation(player)}
-              className="flex-1 flex flex-col items-center justify-center gap-2 py-5 rounded-xl bg-white/10 active:bg-white/20"
+              disabled={settings.playerThreeEnabled}
+              className="flex-1 flex flex-col items-center justify-center gap-2 py-5 rounded-xl bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed active:enabled:bg-white/20"
             >
               <FaArrowUp
                 size={36}
