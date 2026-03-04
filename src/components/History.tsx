@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { FaUndo } from "react-icons/fa";
 import type { ScoreEntry } from "../types/score";
 import type { Settings } from "../types/settings";
@@ -19,6 +19,21 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
     return settings.playerThreeName;
   };
 
+  // Cumulative score for each player at each index
+  const runningTotals = useMemo(() =>
+    entries.map((_, i) => {
+      const slice = entries.slice(0, i + 1);
+      return {
+        1: slice.filter((e) => e.player === 1).reduce((s, e) => s + e.score, 0),
+        2: slice.filter((e) => e.player === 2).reduce((s, e) => s + e.score, 0),
+        3: slice.filter((e) => e.player === 3).reduce((s, e) => s + e.score, 0),
+      };
+    }),
+  [entries]);
+
+  // Scores that would result from rewinding to pendingIndex
+  const rewindScores = pendingIndex !== null ? runningTotals[pendingIndex] : null;
+
   const handleConfirm = () => {
     if (pendingIndex !== null) {
       resetToIndex(pendingIndex);
@@ -34,10 +49,12 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
       )}
       {[...entries].reverse().map((entry, reversedIndex) => {
         const originalIndex = entries.length - 1 - reversedIndex;
+        const total = runningTotals[originalIndex][entry.player];
         return (
           <div key={originalIndex} className={`flex items-center px-3 py-2 rounded-xl border ${themes[entry.player].card} ${themes[entry.player].border} gap-3`}>
-            <span className="opacity-60 w-24">{playerName(entry.player)}</span>
-            <span className="font-semibold flex-1">+{entry.score}</span>
+            <span className="opacity-60 w-24 shrink-0">{playerName(entry.player)}</span>
+            <span className="font-semibold">+{entry.score}</span>
+            <span className="opacity-40 text-sm flex-1">→ {total}</span>
             <span className="text-xs opacity-40">
               {new Date(entry.timestamp).toLocaleTimeString()}
             </span>
@@ -53,11 +70,21 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
         );
       })}
 
-      {pendingIndex !== null && (
+      {pendingIndex !== null && rewindScores && (
         <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setPendingIndex(null)}>
           <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-xl font-bold text-center">Rewind to this point?</h3>
             <p className="text-center opacity-60 text-sm">All scores after this entry will be removed.</p>
+            <div className="flex gap-2">
+              {([1, 2, 3] as const)
+                .filter((p) => p !== 3 || settings.playerThreeEnabled)
+                .map((p) => (
+                  <div key={p} className={`flex-1 flex flex-col items-center py-3 rounded-xl border ${themes[p].card} ${themes[p].border}`}>
+                    <span className="text-xs opacity-50 mb-1">{playerName(p)}</span>
+                    <span className="text-2xl font-bold">{rewindScores[p]}</span>
+                  </div>
+                ))}
+            </div>
             <button
               onClick={handleConfirm}
               className="w-full py-4 rounded-xl bg-red-600 active:bg-red-700 font-semibold text-lg"
