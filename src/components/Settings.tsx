@@ -110,6 +110,17 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
       </div>
 
       <div className="flex flex-col gap-3">
+        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Game</h3>
+        <button
+          onClick={() => setShowConfirm(true)}
+          disabled={!hasScores}
+          className="w-full py-4 rounded-xl bg-red-600 text-white font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed active:enabled:bg-red-700"
+        >
+          Reset Scores
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">How to Use</h3>
         <button
           onClick={() => setShowHowToUse(true)}
@@ -126,17 +137,6 @@ export default function Settings({ reset, hasScores, settings, changePlayerName,
           className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
         >
           Add to Home Screen
-        </button>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-widest opacity-50">Game</h3>
-        <button
-          onClick={() => setShowConfirm(true)}
-          disabled={!hasScores}
-          className="w-full py-4 rounded-xl bg-red-600 text-white font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed active:enabled:bg-red-700"
-        >
-          Reset Scores
         </button>
       </div>
 
