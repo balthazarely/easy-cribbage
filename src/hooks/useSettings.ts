@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Settings } from "../types/settings";
 
 const nameKeys: Record<1 | 2 | 3, keyof Settings> = {
@@ -30,8 +30,16 @@ export function useSettings() {
         };
   });
 
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    localStorage.setItem("cribbage-settings", JSON.stringify(settings));
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      localStorage.setItem("cribbage-settings", JSON.stringify(settings));
+    }, 500);
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
   }, [settings]);
 
   const changePlayerName = (player: 1 | 2 | 3, name: string) => {

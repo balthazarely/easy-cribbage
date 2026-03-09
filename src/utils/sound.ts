@@ -6,6 +6,47 @@ function getCtx() {
   return ctx;
 }
 
+export function playVictory() {
+  try {
+    const ac = getCtx();
+    const now = ac.currentTime;
+
+    // Ascending arpeggio: C5 → E5 → G5 → C6, then a held chord
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    const arpeggioGap = 0.12;
+
+    notes.forEach((freq, i) => {
+      const t = now + i * arpeggioGap;
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(t);
+      osc.stop(t + 0.35);
+    });
+
+    // Sustained chord after arpeggio
+    const chordStart = now + notes.length * arpeggioGap + 0.05;
+    [523.25, 659.25, 783.99].forEach((freq) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.12, chordStart);
+      gain.gain.exponentialRampToValueAtTime(0.001, chordStart + 1.2);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(chordStart);
+      osc.stop(chordStart + 1.2);
+    });
+  } catch {}
+}
+
 export function playTick() {
   try {
     const ac = getCtx();

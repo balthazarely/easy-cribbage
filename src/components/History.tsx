@@ -8,10 +8,12 @@ interface HistoryProps {
   entries: ScoreEntry[];
   settings: Settings;
   resetToIndex: (index: number) => void;
+  reset: () => void;
 }
 
-export default function History({ entries, settings, resetToIndex }: HistoryProps) {
+export default function History({ entries, settings, resetToIndex, reset }: HistoryProps) {
   const [pendingIndex, setPendingIndex] = useState<number | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const playerName = (player: 1 | 2 | 3) => {
     if (player === 1) return settings.playerOneName;
@@ -69,6 +71,36 @@ export default function History({ entries, settings, resetToIndex }: HistoryProp
           </div>
         );
       })}
+
+      {entries.length > 0 && (
+        <button
+          onClick={() => setShowResetConfirm(true)}
+          className="w-full py-4 rounded-xl bg-red-600 active:bg-red-700 font-semibold text-lg mt-2"
+        >
+          Reset Scores
+        </button>
+      )}
+
+      {showResetConfirm && (
+        <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setShowResetConfirm(false)}>
+          <div className="bg-slate-800 rounded-2xl w-full p-6 flex flex-col gap-4 animate-slide-up" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-xl font-bold text-center">Reset Scores?</h3>
+            <p className="text-center opacity-60 text-sm">This will clear all score history and cannot be undone.</p>
+            <button
+              onClick={() => { reset(); setShowResetConfirm(false); }}
+              className="w-full py-4 rounded-xl bg-red-600 active:bg-red-700 font-semibold text-lg"
+            >
+              Yes, Reset
+            </button>
+            <button
+              onClick={() => setShowResetConfirm(false)}
+              className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {pendingIndex !== null && rewindScores && (
         <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4 animate-fade-in" onClick={() => setPendingIndex(null)}>
