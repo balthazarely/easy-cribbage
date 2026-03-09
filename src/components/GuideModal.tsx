@@ -30,6 +30,13 @@ export default function GuideModal({ onClose }: GuideModalProps) {
             </div>
           </div>
         </div>
+        <div className="flex items-start gap-3 bg-white/10 rounded-xl p-3 text-sm">
+          <span className="bg-white/10 rounded-lg p-2 text-base">📱</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="font-semibold opacity-80">Lock your screen orientation</span>
+            <span className="opacity-60">We recommend locking your phone in portrait mode for the best experience.</span>
+          </div>
+        </div>
         <button
           onClick={onClose}
           className="w-full py-4 rounded-xl bg-white/10 active:bg-white/20 font-semibold text-lg"
